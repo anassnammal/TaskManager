@@ -1,6 +1,6 @@
 import { Router, Response, Request } from "express";
 import taskRouter from "./task.routes";
-import authMidleware from "../midleware/auth";
+// import authMidleware from "../midleware/auth";
 
 const indexRouter = Router();
 

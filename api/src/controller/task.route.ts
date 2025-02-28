@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import prisma from "../sevice/prismaClient";
+import { createTaskSchema, updateTaskSchema } from "../schema/task.schema";
 
 export async function getTasks(req: Request, res: Response) {
     try {
@@ -39,8 +40,9 @@ export async function getTask(req: Request, res: Response) {
 
 export async function createTask(req: Request, res: Response) {
     try {
+        const validatedData = createTaskSchema.parse(req.body);
         const task = await prisma.task.create({
-            data: req.body,
+            data: validatedData,
         });
 
         res.status(201).send({
@@ -58,11 +60,11 @@ export async function createTask(req: Request, res: Response) {
 export async function updateTask(req: Request, res: Response) {
     const { id } = req.params;
     try {
-        console.log('hee', id)
+        const validatedData = updateTaskSchema.parse(req.body);
         if (!id ) throw Error('Not found: missing Id')
         const task = await prisma.task.update({
             where: { id: id },
-            data: req.body,
+            data: validatedData,
         })
 
         res.status(200).send({

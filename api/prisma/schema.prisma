@@ -16,7 +16,7 @@ datasource db {
 model Task {
   id String @id @default(auto()) @map("_id") @db.ObjectId
   title String
-  descreption String
+  description String
   dueDate DateTime @default(now())
   status String
 }

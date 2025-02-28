@@ -4,9 +4,6 @@ import { Task, columns } from "./component/columns"
 import { DataTable } from "./component/data-table"
 import useGetTasks from "./hook/useGetTasks"
 
-
-
-
 export default function Page() {
   const [data, error, pending] = useGetTasks()
 

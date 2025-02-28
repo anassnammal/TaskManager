@@ -1,8 +1,8 @@
 'use client'
 import React, { createContext, useContext, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
-import { TaskDialog } from "@/app/(core)/todos/component/TaskDialog";
-import { Task } from "@/app/(core)/todos/component/columns";
+import { TaskDialog } from "@/components/TaskDialog";
+import { Task } from "@/lib/type";
 
 interface DialogContentProps {
     setTask: React.Dispatch<React.SetStateAction<Task | undefined>>;

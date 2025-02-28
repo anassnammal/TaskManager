@@ -18,9 +18,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Task, CreateTask, UpdateTask } from "@/lib/type";
 import { useEffect, useState } from "react";
-import useCreateTasks from "../hook/useCreateTask";
-import useUpdateTasks from "../hook/useUpdateTask";
+import useCreateTasks from "../app/(core)/todos/hook/useCreateTask";
+import useUpdateTasks from "../app/(core)/todos/hook/useUpdateTask";
 import { createTaskSchema, statusEnumSchema, updateTaskSchema } from "@/lib/schema";
+import { useDialog } from "@/components/DialogProvider";
+import { FilePenLine  } from "lucide-react";
 
 interface TaskDialogProps {
   data?: Task;
@@ -37,13 +39,25 @@ export function TaskDialog(task: TaskDialogProps) {
   const {createTask, data: createdData, error: createError, pending: createPending} = useCreateTasks();
   const {updateTask, data: updatedData, error: updateError, pending: updatePending} = useUpdateTasks();
 
+  const { setOpen } = useDialog();
+
+  useEffect(() => {
+    if (createdData || updatedData) {
+      setOpen(false)
+    }
+  }, [createdData, updatedData, setOpen])
+
   const handleSubmit = () => {
-    if (task.data) {
-      const validated = updateTaskSchema.parse(data);
-      updateTask(validated, task.data?.id);
-    } else {
-      const validated = createTaskSchema.parse(data);
-      createTask(validated);
+    try {
+      if (task.data) {
+        const validated = updateTaskSchema.parse(data);
+        updateTask(validated, task.data?.id);
+      } else {
+        const validated = createTaskSchema.parse(data);
+        createTask(validated);
+      }
+    } catch (error) {
+      console.error((error as Error).message);
     }
   }
 
@@ -52,8 +66,8 @@ export function TaskDialog(task: TaskDialogProps) {
   return (
     <>
       <DialogHeader>
-        <DialogTitle>Edit Task</DialogTitle>
-        <DialogDescription>Task</DialogDescription>
+        <DialogTitle className="mx-auto"><FilePenLine /></DialogTitle>
+        <DialogDescription>{task.data ? 'Update Task' : 'Create new Task'}</DialogDescription>
       </DialogHeader>
       <div className="grid gap-4 py-4">
         <div className="grid grid-cols-4 items-center gap-4">
@@ -111,7 +125,7 @@ export function TaskDialog(task: TaskDialogProps) {
         </div>
       </div>
       <DialogFooter>
-        <Button type="submit" onClick={handleSubmit} > {task.data ? 'Save changes' : 'Create Task'}</Button>
+        <Button type="submit" onClick={handleSubmit}> Submit </Button>
       </DialogFooter>
     </>
   );
