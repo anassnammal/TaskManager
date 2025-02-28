@@ -1,8 +1,8 @@
 import {useState, useEffect} from "react";
-import { Task } from "../component/columns";
+import { Task } from "@/lib/type";
 
 const fetchTask = async (id: string) => {
-    const res = await fetch(`http://localhost:5000/tasks/${id}`);
+    const res = await fetch(`http://localhost:5154/tasks/${id}`);
     if (!res.ok) throw Error('An error occured while fetching tasks')
     return await res.json();
 }

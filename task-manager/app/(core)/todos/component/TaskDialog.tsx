@@ -28,9 +28,11 @@ interface TaskDialogProps {
 
 export function TaskDialog(task: TaskDialogProps) {
   
-  const [data, setData] = useState<UpdateTask | CreateTask>(
-    task.data ?? { title: "", description: "", status: "Todo" }
-  );
+  const [data, setData] = useState<UpdateTask | CreateTask>({
+    title: task.data?.title ?? "",
+    description: task.data?.description ?? "",
+    status: task.data?.status ?? "Todo"
+  });
 
   const {createTask, data: createdData, error: createError, pending: createPending} = useCreateTasks();
   const {updateTask, data: updatedData, error: updateError, pending: updatePending} = useUpdateTasks();
@@ -38,7 +40,7 @@ export function TaskDialog(task: TaskDialogProps) {
   const handleSubmit = () => {
     if (task.data) {
       const validated = updateTaskSchema.parse(data);
-      updateTask(validated);
+      updateTask(validated, task.data?.id);
     } else {
       const validated = createTaskSchema.parse(data);
       createTask(validated);

@@ -1,20 +1,18 @@
 import { useState } from "react";
-import { Task, UpdateTask } from "@/lib/type";
+import { Task, CreateTask } from "@/lib/type";
 
-export default function useUpdateTasks() {
+export default function useCreateTasks() {
   const [data, setData] = useState<Task | undefined>(undefined);
   const [error, setError] = useState<string | undefined>(undefined);
   const [pending, setPending] = useState(true);
 
-  const updateTask = async (data: UpdateTask, id: string) => {
+  const createTask = async (data: CreateTask) => {
     setPending(true);
     setError(undefined);
+
     try {
-      const res = await fetch(`http://localhost:5154/tasks/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
+      const res = await fetch(`http://localhost:5154/tasks/`, {
+        method: "POST",
         body: JSON.stringify(data),
       });
       if (!res.ok) throw Error("An error occured while fetching tasks");
@@ -29,5 +27,5 @@ export default function useUpdateTasks() {
     }
   };
 
-  return {updateTask, data, error, pending};
+  return {createTask, data, error, pending};
 }

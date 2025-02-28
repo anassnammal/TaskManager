@@ -13,14 +13,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import RowAction from "./RowAction";
 import { ArrowUpDown, Filter , X } from "lucide-react";
-
-export type Task = {
-  id: string;
-  title: string;
-  description: string;
-  dueDate: Date;
-  status: "Todo" | "In Progress" | "Completed";
-};
+import { Task } from "@/lib/type";
 
 export const columns: ColumnDef<Task>[] = [
   {

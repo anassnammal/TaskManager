@@ -23,7 +23,7 @@ export default function RowAction({ task }: { task: Task }) {
   };
 
   const deleteTask = async (id: string) => {
-    const res = await fetch(`http://localhost:5000/tasks/${id}`, {method: 'DELETE'})
+    const res = await fetch(`http://localhost:5154/tasks/${id}`, {method: 'DELETE'})
     if (!res.ok) throw Error('An error occured while fetching tasks')
     return await res.json();
   }
