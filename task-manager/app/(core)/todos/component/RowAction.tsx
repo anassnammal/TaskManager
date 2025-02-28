@@ -10,10 +10,12 @@ import { Button } from "@/components/ui/button";
 import { useDialog } from "@/components/DialogProvider";
 import { MoreHorizontal } from "lucide-react";
 
-import { Task } from "./columns";
+import { Task } from "@/lib/type";
+import { useCache } from "@/components/CacheProvider";
 
 export default function RowAction({ task }: { task: Task }) {
   const { setOpen, setTask } = useDialog();
+  const {setData} = useCache();
 
   const updateTask = () => {
     if (task) {
@@ -25,7 +27,7 @@ export default function RowAction({ task }: { task: Task }) {
   const deleteTask = async (id: string) => {
     const res = await fetch(`http://localhost:5154/tasks/${id}`, {method: 'DELETE'})
     if (!res.ok) throw Error('An error occured while fetching tasks')
-    return await res.json();
+    setData(prev => prev!.filter(t => t.id !== id))
   }
   return (
     <DropdownMenu>

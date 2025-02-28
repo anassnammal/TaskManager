@@ -23,6 +23,7 @@ import useUpdateTasks from "../app/(core)/todos/hook/useUpdateTask";
 import { createTaskSchema, statusEnumSchema, updateTaskSchema } from "@/lib/schema";
 import { useDialog } from "@/components/DialogProvider";
 import { FilePenLine  } from "lucide-react";
+import { useCache } from "./CacheProvider";
 
 interface TaskDialogProps {
   data?: Task;
@@ -36,16 +37,23 @@ export function TaskDialog(task: TaskDialogProps) {
     status: task.data?.status ?? "Todo"
   });
 
-  const {createTask, data: createdData, error: createError, pending: createPending} = useCreateTasks();
-  const {updateTask, data: updatedData, error: updateError, pending: updatePending} = useUpdateTasks();
+  const { setData: setCache } = useCache();
+
+  const {createTask, data: createdData} = useCreateTasks();
+  const {updateTask, data: updatedData} = useUpdateTasks();
 
   const { setOpen } = useDialog();
 
   useEffect(() => {
-    if (createdData || updatedData) {
+    if (createdData) {
+      setCache((prev) => ({createdData, ...prev!}))
       setOpen(false)
     }
-  }, [createdData, updatedData, setOpen])
+    if (updatedData) {
+      setCache((prev) => prev!.map((t: Task) => t.id === updatedData.id ? updatedData : t))
+      setOpen(false)
+    }
+  }, [createdData, updatedData, setOpen, setCache])
 
   const handleSubmit = () => {
     try {

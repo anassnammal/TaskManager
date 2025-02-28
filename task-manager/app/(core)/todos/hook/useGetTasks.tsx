@@ -18,5 +18,5 @@ export default function useGetTasks() {
                 .finally(() => setPending(false))
     }, [])
 
-    return [data, error, pending]
+    return {data, error, pending}
 }
