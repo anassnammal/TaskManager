@@ -16,10 +16,11 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Task } from "./columns";
+import { Task, CreateTask, UpdateTask } from "@/lib/type";
 import { useEffect, useState } from "react";
 import useCreateTasks from "../hook/useCreateTask";
 import useUpdateTasks from "../hook/useUpdateTask";
+import { createTaskSchema, statusEnumSchema, updateTaskSchema } from "@/lib/schema";
 
 interface TaskDialogProps {
   data?: Task;
@@ -27,16 +28,22 @@ interface TaskDialogProps {
 
 export function TaskDialog(task: TaskDialogProps) {
   
-  const [data, setData] = useState(
+  const [data, setData] = useState<UpdateTask | CreateTask>(
     task.data ?? { title: "", description: "", status: "Todo" }
   );
 
   const {createTask, data: createdData, error: createError, pending: createPending} = useCreateTasks();
   const {updateTask, data: updatedData, error: updateError, pending: updatePending} = useUpdateTasks();
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
+  const handleSubmit = () => {
+    if (task.data) {
+      const validated = updateTaskSchema.parse(data);
+      updateTask(validated);
+    } else {
+      const validated = createTaskSchema.parse(data);
+      createTask(validated);
+    }
+  }
 
 
 
@@ -78,9 +85,10 @@ export function TaskDialog(task: TaskDialogProps) {
             Status
           </Label>
           <Select
-            onValueChange={(value) =>
-              setData((prev) => ({ ...prev, status: value }))
-            }
+            onValueChange={(value) => {
+              const parsedStatus = statusEnumSchema.parse(value);
+              setData((prev) => ({ ...prev, status: parsedStatus }))
+            }}
             defaultValue={data.status}
           >
             <SelectTrigger
@@ -101,7 +109,7 @@ export function TaskDialog(task: TaskDialogProps) {
         </div>
       </div>
       <DialogFooter>
-        <Button type="submit" onClick={() => createTask(data)} > {task.data ? 'Save changes' : 'Create Task'}</Button>
+        <Button type="submit" onClick={handleSubmit} > {task.data ? 'Save changes' : 'Create Task'}</Button>
       </DialogFooter>
     </>
   );
