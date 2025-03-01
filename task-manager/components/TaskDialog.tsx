@@ -46,10 +46,9 @@ export function TaskDialog(task: TaskDialogProps) {
 
   useEffect(() => {
     if (createdData) {
-      setCache((prev) => ({createdData, ...prev!}))
+      setCache((prev) => ([createdData, ...prev!]))
       setOpen(false)
-    }
-    if (updatedData) {
+    } else if (updatedData) {
       setCache((prev) => prev!.map((t: Task) => t.id === updatedData.id ? updatedData : t))
       setOpen(false)
     }

@@ -11,7 +11,6 @@ export default function useCreateTasks() {
     setError(undefined);
 
     try {
-      console.log(data)
       const res = await fetch(`http://localhost:5154/tasks`, {
         method: "POST",
         headers: {

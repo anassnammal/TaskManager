@@ -19,9 +19,9 @@ export default function Page() {
 
   return (
     <div className="container mx-auto py-10">
-      {pending ? <h2>Waiting for data</h2>
+      {pending || !chachedData ? <h2>Waiting for data</h2>
       : error ? <h1>{error as string}</h1>
-      : <DataTable columns={columns} data={chachedData ?? data!} />}
+      : <DataTable columns={columns} data={chachedData} />}
     </div>
   )
 }

@@ -20,9 +20,11 @@ export const columns: ColumnDef<Task>[] = [
     accessorKey: "title",
     header: "Task",
     filterFn: (row, columnId, filterValue) => {
-
-        return row.original.title.includes(filterValue)
-            || row.original.description.includes(filterValue);
+      const needle = filterValue.toLowerCase();
+      const haystacks = [row.original.title.toLowerCase(),
+                        row.original.description.toLowerCase(),
+                        row.original.status.toLowerCase()];
+        return haystacks.join(',').includes(needle)
     },
   },
   {
