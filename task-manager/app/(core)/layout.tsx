@@ -5,6 +5,7 @@ import CacheProvider from "@/components/CacheProvider";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ListTodo, LayoutDashboard } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 export default function RootLayout({
   children,
@@ -13,27 +14,36 @@ export default function RootLayout({
 }>) {
   const path = usePathname();
 
-  const nav = {
-    '/dashboard': {
-        title: 'Tasks',
-        icon: ListTodo,
-        href: '/todos'
+  const links = [
+    {
+      title: "Dashboard",
+      icon: LayoutDashboard,
+      href: "/dashboard",
     },
-    '/todos': {
-        title: 'Dashboard',
-        icon: LayoutDashboard,
-        href: '/dashboard'
-    }
-  }
-  const currentNav = nav[path as '/dashboard' | '/todos'];
+    {
+      title: "Tasks",
+      icon: ListTodo,
+      href: "/todos",
+    },
+  ];
 
   return (
     <>
-      <div className="mx-4 mt-2">
-          <Link href={currentNav.href}  className="flex items-center gap-2">
-            <currentNav.icon />
-            <span className="text-xl underline">{currentNav.title}</span>
+      <div className="flex w-full sm:w-[85%] mx-auto mt-2 px-2 py-1 gap-2 border-2 rounded-md">
+        {links.map((link) => (
+          <Link
+            href={link.href}
+            key={link.href}
+            className={cn(
+                "flex items-center gap-2",
+                path === link.href ? 'text-primary':
+                'text-primary/50'
+            )}
+          >
+            <link.icon />
+            <span className="text-xl underline">{link.title}</span>
           </Link>
+        ))}
       </div>
       <CacheProvider>
         <DialogProvider>{children}</DialogProvider>

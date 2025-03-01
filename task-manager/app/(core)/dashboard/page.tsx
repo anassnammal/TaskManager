@@ -26,7 +26,7 @@ const getDataStatistics = (data: Task[] | null) => {
 export default function Home() {
   const statistics = getDataStatistics(null)
   return (
-    <div className="grid grid-cols-3 container mx-auto py-10 gap-2">
+    <div className="grid grid-cols-3 w-full sm:w-[85%] mx-auto py-10 gap-2">
       <div className="col-span-3 text-center text-3xl pb-4 font-bold">
         <h1>Dashboard</h1>
       </div>

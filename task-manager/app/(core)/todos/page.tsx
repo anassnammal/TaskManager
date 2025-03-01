@@ -18,7 +18,7 @@ export default function Page() {
   }, [data, pending, error, setData])
 
   return (
-    <div className="container mx-auto py-10">
+    <div className="w-full sm:w-[85%] mx-auto py-10">
       {pending || !chachedData ? <h2>Waiting for data</h2>
       : error ? <h1>{error as string}</h1>
       : <DataTable columns={columns} data={chachedData} />}
